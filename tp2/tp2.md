@@ -8,13 +8,13 @@
 
 - Santiago M. Henn
 
-## Integrantes
+### Integrantes
 
-| Nombre                            | Correo Electrónico              |
-| --------------------------------- | ------------------------------- |
-| Facundo Emanuel Avila Diaz Moreno | facundo.avila.027@mi.unc.edu.ar |
-|                                   |                                 |
-| Ignacio Joaquin Vigezzi           | ignacio.vigezzi@mi.unc.edu.ar   |
+- Facundo Emanuel Avila Diaz Moreno
+
+- Facundo Esteban Guerrero Pozzi
+
+- Ignacio Joaquin Vigezzi
 
 ## Armado y verificación de cables Cat5/Cat5e bajo estándar T568A/B
 
@@ -33,5 +33,3 @@ Para verificar el correcto funcionamiento del cable, utilizamos un switch para c
 ![ping](https://github.com/user-attachments/assets/dc087208-a7a2-4afd-94ea-74206e5db19b)
 
 Mediante ping podemos ver que la conexión es exitosa y sin pérdida de paquetes, por lo tanto, el cable funciona correctamente.
-
-
