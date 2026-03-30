@@ -1,22 +1,5 @@
 # Redes de Computadoras - Trabajo Práctico 1
 
-### Grupo: Error de Capa 8
-
-### Profesores:
-
-- Facundo O. Cuneo
-
-- Santiago M. Henn
-
-## Integrantes
-
-| Nombre                            | Correo Electrónico                  |
-| --------------------------------- | ------------------------------------|
-| Facundo Emanuel Avila Diaz Moreno | facundo.avila.027@mi.unc.edu.ar     |
-| Facundo Esteban Guerrero Pozzi    | facundo.guerrero.pozzi@mi.unc.edu.ar|
-| Ignacio Joaquin Vigezzi           | Ignacio.vigezzi@mi.unc.edu.ar       |
-
-
 # Parte 1 - Simulación de Red y envío de paquetes.
 ## Introducción
 La experiencia fue un ejercicio de simulación de red mediante un juego de roles, para comprender mejor el tráfico de paquetes, nos dividimos en grupos de tres o cuatro personas, asumiendo distintos roles dentro de la arquitectura de la red. Cada integrante recibío un papel el cual simularía el paquete a enviar.
@@ -49,11 +32,11 @@ Cada host partía conociendo información propia a partir de una tabla de datos,
 
 **1. Del Host al Gateway:** El host armaba el mensaje (el papel). Se anotaba el payload, la IP de origen y la de destino. Ponía su propia MAC como origen y la MAC de su Default Gateway como destino, ponía el TTL (time to live) en 6 y entregaba el “paquete” (papel) a su gateway. En nuestro caso como eramos hosts, así fue como quedó uno de nuestros paquetes a enviar:
 
- ![alt text](image.png)
+ ![](paquete.png)
  
 **2. El salto en el Gateway:** Una vez que el Gateway recibía el papel, preparaba el paquete para el siguiente salto (hop). Mantenía las IPs intactas, pero debía cambiar las direcciones físicas MAC poniendo ahora la suya como MAC de origen y la del Router como MAC de destino y restando el TTL en uno. Quedando por ejemplo: 
 
-![alt text](image-1.png)
+![](paqueteHop2.png)
 
 **3. La decisión del Router:** Una vez que al router conectado a nuestro Gateway le llegaba el papel, debía fijarse en la IP de destino para ver a qué subred correspondía, esto lo hacía verificando el prefijo de la IP, donde había dos posibilidades:
 
