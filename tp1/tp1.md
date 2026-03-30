@@ -10,15 +10,24 @@
 
 ## Integrantes
 
-| Nombre                            | Correo Electrónico              |
-| --------------------------------- | ------------------------------- |
-| Facundo Emanuel Avila Diaz Moreno | facundo.avila.027@mi.unc.edu.ar |
-|                                   |                                 |
-|                                   |                                 |
+| Nombre                            | Correo Electrónico                  |
+| --------------------------------- | ------------------------------------|
+| Facundo Emanuel Avila Diaz Moreno | facundo.avila.027@mi.unc.edu.ar     |
+| Facundo Esteban Guerrero Pozzi    | facundo.guerrero.pozzi@mi.unc.edu.ar|
+| Ignacio Joaquin Vigezzi           | Ignacio.vigezzi@mi.unc.edu.ar       |
 
+
+# Parte 1 - Simulación de Red y envío de paquetes.
+## Introducción
+La experiencia fue un ejercicio de simulación de red mediante un juego de roles, para comprender mejor el tráfico de paquetes, nos dividimos en grupos de tres o cuatro personas, asumiendo distintos roles dentro de la arquitectura de la red. Cada integrante recibío un papel el cual simularía el paquete a enviar.
 ## 1. Identificación de dispositivos y armado de la topología.
 
-En el caso de este grupo, funcionamos como hosts de la red, teniendo un alumno que actuó como Router/Gateway predeterminado, y otro que actuó como host (debido a que un alumno no figuraba en los datos de alumnos, se tuvo un solo host), conformando así la red LAN.
+Cada grupo fue un nodo lógico, operando bajo una topología física en estrella en el núcleo de la red:
+
+* **Los Hosts y Gateways:** En cada grupo, casi todos hacían de equipos hosts, menos un integrante que tomaba el rol de Default Gateway (la puerta de enlace de ese grupo).
+* **Los Routers:** Había tres grupos que funcionaban exclusivamente como routers. Estaban conectados entre sí usando una topología en estrella y, a su vez, cada router tenía conectados varios Default Gateways (de los otros grupos de los hosts).
+
+En el caso de este grupo, funcionamos como hosts de la red, teniendo un alumno que actuó como Router/Gateway predeterminado, y otro que actuó como host.
 El gateway predeterminado se encarga de ser la puerta de salida de los paquetes que se desean enviar fuera de la red. Además, cuando se reciben paquetes de otra red, estos llegan al gateway predeterminado, antes de decidir a qué host de la red local enviar, o si se deben enviar a otra red externa.
 
 ### NIC de los dispositivos de la red:
@@ -30,11 +39,35 @@ El gateway predeterminado se encarga de ser la puerta de salida de los paquetes 
 
 El host de destino debía transmitir a la dirección IP 10.8.0.101, el siguiente payload: cd97 (1100110110010111 en binario)
 
-## 2. Armado de topología
 
 ![](topografia.png)
 
 Como se puede apreciar en la imagen, cada red LAN es conformada por una topología estrella, ya que todos los hosts se conectan a un nodo central, el default gateway, el cual gestiona el tráfico. Es la topología más común en redes LAN modernas por su alta confiabilidad: Si falla un cable, solo ese nodo pierde conexión, sin afectar al resto
+
+## 2. Mecánica de Transmisión: (El proceso Hop-by-Hop) 
+Cada host partía conociendo información propia a partir de una tabla de datos, como eran su dirección MAC, su IP de origen, una IP de destino y un payload (la carga útil, que era un valor hexadecimal de 16 bits). Con eso podía comenzar el proceso de transmisión.
+
+**1. Del Host al Gateway:** El host armaba el mensaje (el papel). Se anotaba el payload, la IP de origen y la de destino. Ponía su propia MAC como origen y la MAC de su Default Gateway como destino, ponía el TTL (time to live) en 6 y entregaba el “paquete” (papel) a su gateway. En nuestro caso como eramos hosts, así fue como quedó uno de nuestros paquetes a enviar:
+
+ ![alt text](image.png)
+ 
+**2. El salto en el Gateway:** Una vez que el Gateway recibía el papel, preparaba el paquete para el siguiente salto (hop). Mantenía las IPs intactas, pero debía cambiar las direcciones físicas MAC poniendo ahora la suya como MAC de origen y la del Router como MAC de destino y restando el TTL en uno. Quedando por ejemplo: 
+
+![alt text](image-1.png)
+
+**3. La decisión del Router:** Una vez que al router conectado a nuestro Gateway le llegaba el papel, debía fijarse en la IP de destino para ver a qué subred correspondía, esto lo hacía verificando el prefijo de la IP, donde había dos posibilidades:
+
+* **La IP de destino era de sus equipos locales:** Actualizaba las MACs (su MAC como origen y la del Gateway final como destino) y entregaba el mensaje, restando el TTL en 1. Posteriormente el Gateway de ese grupo la entregaba al host con la IP de destino originalmente modificado por última vez las direcciones MAC, restando también el TTL en uno.
+* **La IP de destino era de otra red (no pertenecían a los grupos conectados a él):** Le debía entregar el paquete a otro router a través de la topología en estrella. Para hacer esto, volvía a cambiar las MACs (origen = este router, destino = el próximo router) y restando el TTL en 1. El nuevo router que recibía el paquete, repetía el ciclo hasta que el paquete llegaba al grupo correcto.
+
+Vemos como el TTL se va restando en 1 en cada salto, esto permite evitar que el paquete quede indefinidamente circulando por la red, ya que al llegar a 0 el paquete se descarta. 
+Algo que ocurrió en la experiencia, fue que había algunas IPs destino que no pertenecían a ninguno de los hosts conectados, por lo que se pudo ver que el paquete iba saltando de router en router, hasta que finalmente era descartado ya que su TTL llegaba a 0. 
+
+### Conclusiones
+Este trabajo práctico nos sirvió mucho para poder visualizar de forma tangible como funciona la transmisión de paquetes. Pudimos ver claro el proceso hop by hop y diferencias clave como:
+
+* **IP vs. MAC:** Quedó claro que las direcciones IP son inmutables durante el viaje (marcan el origen y destino final), mientras que las direcciones MAC van cambiando en cada salto físico (hop-by-hop) para que el paquete pueda avanzar.
+* **Topología en estrella:** Vimos de primera mano lo eficiente que es esta estructura para centralizar el tráfico y repartirlo a las redes correspondientes.
 
 ## Parte 2. Inyección y detección de errores.
 
