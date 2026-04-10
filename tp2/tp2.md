@@ -168,4 +168,5 @@ Se comprueba que la conexión a internet se estableció correctamente.
 ## Conclusiones
 
 En este trabajo se pudo trabajar con varias capas del modelo OSI. Primero, con la capa física, armando cables UTP con nuestras propias manos, lo cual fue una muy buena experiencia, porque siempre se trabajó en lo teórico y muy poco en lo práctico, y en este trabajo se trabajó con las capas mas bajas. Luego de dos intentos fallidos, el cable pasó el test, y utilizando el router de TP-LINK, ya que no se tuvo el tiempo suficiente de configurar el switch en clases, se pudieron enviar paquetes hacia la PC de los compañeros.
+
 Durante la etapa de testeo de conectividad hacia el host del compañero, se prescindió de un servidor DHCP, optando por una asignación manual de IPs. Esto permitió tener un control total sobre el direccionamiento de la red local. Al ejecutar exitosamente el comando **ping**, se verificó el ciclo de vida completo de un paquete: la encapsulación de los datos, el direccionamiento lógico en la Capa 3 y la transmisión física a través del medio UTP fabricado durante la práctica, consolidando así los conceptos teóricos del modelo OSI vistos en la materia.
