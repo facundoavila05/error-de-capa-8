@@ -16,7 +16,38 @@
 
 - Ignacio Joaquin Vigezzi
 
-## 1
+## 1 Investigación conceptual
+
+### a) ¿Qué es SSH y qué problema resuelve?
+
+SSH (Secure Shell) es un protocolo de red que permite administrar y acceder a equipos remotos de forma segura a través de una conexión cifrada. Resuelve el problema de los protocolos previos como Telnet o rlogin, que transmitían credenciales y comandos en texto plano, exponiendo todo a quien estuviera capturando tráfico en la red.
+
+### b) Diferencia entre autenticación y cifrado
+
+Son dos términos que suelen confundirse.
+La autenticación, por un lado, verifica la identidad ("¿quién sos?"). Confirma que el usuario sea quien dice ser, mediante sus credenciales. Por el otro lado, el cifrado protege la confidencialidad del contenido ("¿qué contiene el mensaje?"). Transforma los datos para que un tercero que los intercepte no pueda leerlos.
+
+### c) ¿Qué es una clave pública y una clave privada?
+
+Son un par de claves matemáticamente relacionadas usadas en criptografía asimétrica. La clave pública se distribuye libremente y se usa para cifrar mensajes o verificar firmas. La clave privada se mantiene en secreto y se usa para descifrar lo que se cifró con la pública o para firmar digitalmente. Lo que cifra una solo lo puede descifrar la otra.
+
+### d) ¿Por qué la clave privada no debe compartirse?
+
+La clave privada no debe compartirse debido es la prueba de identidad, cualquiera que la posea puede hacerse pasar por la persona, autenticarse en servidores donde está autorizada la clave pública, y descifrar contenido dirigido al dueño de la clave pública. Compartirla equivale a entregar tu identidad digital.
+
+### e) ¿Qué ventajas tienen las claves SSH frente a contraseñas?
+
+Las ventajas que tienen las claves SSH frente a contraseñas son las siguientes:
+
+- Resisten ataques de fuerza bruta (las claves típicas son de 2048-4096 bits, imposibles de adivinar).
+
+- No se transmiten por la red durante la autenticación (se usa un challenge-response).
+
+- No se pueden "filtrar" por phishing como una contraseña.
+
+- Permiten automatización segura (scripts, CI/CD) sin guardar contraseñas en texto plano.
+
+- Se pueden revocar individualmente sin afectar a otros usuarios.
 
 ## 2 Verificación conexión SSH con alguna de las VMs reservadas
 
@@ -61,23 +92,43 @@ La PC1 envía los mensajes con el comando **ncat 4.206.217.219 5555**, el cual u
 
 ![](netcat.jpg)
 
----
-
-### Captura de Handshake TCP en Wireshark
+Netcat no cifra absolutamente nada. Es una herramienta de red "cruda" que abre un socket TCP o UDP y manda los bytes tal cual. Por ello, en wireshark, se pudo observar completamente el handshake de tres vías (SYN → SYN-ACK → ACK), y luego cada mensaje escrito en la terminal apareció en texto plano dentro del payload del paquete.
 
 ---
 
 ### Montaje de servidor UDP
 
+Para UDP se utilizó **ncat -u -l <puerto>** en la VM y **ncat -u <VM_IP> <puerto>** desde la notebook local. No hay handshake, ya que UDP es sin conexión, y los mensajes viajan igualmente en texto plano. Wireshark los muestra directo en el panel de bytes.
+
+Netcat es el equivalente a hablar a los gritos en una sala llena de gente. Cualquiera en el camino (el router, el ISP, los routers intermedios, el datacenter de Azure) puede leer todo si tiene acceso al tráfico.
+
 ---
 
 ### Conexión con otra VM mediante netcat, envío de mensajes ida y vuelta
 
-Trabajando nuevamente en conjunto con el grupo **Xi Jinping Revenge**,
+Trabajando nuevamente en conjunto con el grupo **Xi Jinping Revenge**, se procedió a establecer conexión de las dos PCs a través de netcat. Se pudo hacer un envío y recepción de frases entre ellas, al estilo chat entre las dos instancias.
 
 ![](enviorecepcion.jpg)
 
-## 6
+---
+
+### Despliegue de servidor HTTP
+
+En la carpeta **ErrorDeCapa8** de la PC2, se crea un archivo index.html, y se levanta un servidor web a esa página creada, a traves de Python y Http-Server
+
+```sh
+python3 -m http.server 8000
+```
+
+![](paginaweb.jpg)
+
+Analizando en Wireshark, se puede comprobar que efectivamente se puede descifrar el contenido. El motivo es que se está utilizando HTTP, sin la S, el cual envía el contenido en texto plano. En Wireshark se aprecia perfectamente el request **(GET / HTTP/1.1)** y el response **(HTTP/1.0 200 OK)**, headers, y el HTML completo del index.html visible byte por byte.
+
+### ¿Se podría intervenir?
+
+Si, a través del ataque Man-in-the-Middle, un atacante posicionado en el medio podría leer todo las peticiones enviadas al servidor, y las respuestas de éste último (sniffing pasivo). También se podría modificar el contenido en el vuelo, por ejemplo, cambiar mi pagina index.html, el título de "Bienvenido a nuestro servidor!" por otra cosa, inyectar código JS malicioso, o redirigir a otro sitio. Además podría inyectar requests falsos, haciéndose pasar por el cliente.
+
+## Consigna 6
 
 ### Relacionar el problema que aborda el video con los TPs 1), 2) y 3). ¿Qué cosas que hemos aprendido se aplican directamente al problema demostrado?
 
