@@ -16,7 +16,7 @@
 
 - Ignacio Joaquin Vigezzi
 
-## 1 Investigación conceptual
+## Investigación conceptual
 
 ### a) ¿Qué es SSH y qué problema resuelve?
 
@@ -49,7 +49,7 @@ Las ventajas que tienen las claves SSH frente a contraseñas son las siguientes:
 
 - Se pueden revocar individualmente sin afectar a otros usuarios.
 
-## 2 Verificación conexión SSH con alguna de las VMs reservadas
+## Verificación conexión SSH con las VMs reservadas
 
 Se utilizaron las PCs 1 y 2. Se conectó a la PC2 a traves de ssh utilizando el siguiente comando en la terminal:
 
@@ -92,6 +92,8 @@ La PC1 envía los mensajes con el comando **ncat 4.206.217.219 5555**, el cual u
 
 ![](netcat.jpg)
 
+La opción **Follow TCP Stream** en Wireshark, permite comprobar que el contenido es completamente legible, no posee ningún tipo de cifrado de por medio, por lo que cualquier interceptor podría descifrar el mensaje sin esfuerzo
+
 Netcat no cifra absolutamente nada. Es una herramienta de red "cruda" que abre un socket TCP o UDP y manda los bytes tal cual. Por ello, en wireshark, se pudo observar completamente el handshake de tres vías (SYN → SYN-ACK → ACK), y luego cada mensaje escrito en la terminal apareció en texto plano dentro del payload del paquete.
 
 ---
@@ -128,7 +130,7 @@ Analizando en Wireshark, se puede comprobar que efectivamente se puede descifrar
 
 Si, a través del ataque Man-in-the-Middle, un atacante posicionado en el medio podría leer todo las peticiones enviadas al servidor, y las respuestas de éste último (sniffing pasivo). También se podría modificar el contenido en el vuelo, por ejemplo, cambiar mi pagina index.html, el título de "Bienvenido a nuestro servidor!" por otra cosa, inyectar código JS malicioso, o redirigir a otro sitio. Además podría inyectar requests falsos, haciéndose pasar por el cliente.
 
-## Consigna 6
+## Video de Verisitasium
 
 ### Relacionar el problema que aborda el video con los TPs 1), 2) y 3). ¿Qué cosas que hemos aprendido se aplican directamente al problema demostrado?
 
