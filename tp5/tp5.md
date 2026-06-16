@@ -1,14 +1,16 @@
-# Trabajo Práctico N°5: Simulación de Infraestructura (Server Survival)
+# Trabajo Práctico 5 — Redes de Computadoras
 
-**Asignatura:** Redes de Computadoras  
-**Grupo / Nombre:** Error de Capa 8  
+**Universidad Nacional de Córdoba**  
+Facultad de Ciencias Exactas, Físicas y Naturales  
 
----
+**Grupo:** Error de Capa 8
 
-## Objetivos del Trabajo Práctico
-* **Comprender** cómo una arquitectura de servicios responde ante distintos tipos de tráfico.
-* **Relacionar** componentes de infraestructura cloud con conceptos de redes: ruteo, balanceo de carga, almacenamiento, bases de datos, caché, colas y filtrado de tráfico malicioso.
-* **Analizar** fallas, cuellos de botella y decisiones de escalabilidad.
+**Integrantes:**
+
+- Avila Diaz Moreno Facundo Emanuel
+- Guerrero Pozzi Facundo Esteban
+- Vigezzi Ignacio
+
 
 ---
 
